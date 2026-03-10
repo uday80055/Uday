@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arjun Krishnamurthy | Wintel & VMware Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181b22;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00e5ff;
+    --accent2: #7c6bff;
+    --accent3: #39ff9a;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --card-glow: rgba(0, 229, 255, 0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: rgba(0,229,255,0.07); top: -100px; right: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(124,107,255,0.06); bottom: 200px; left: -100px; animation-delay: -4s; }
+  .orb-3 { width: 300px; height: 300px; background: rgba(57,255,154,0.05); top: 50%; left: 50%; animation-delay: -2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-30px); }
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(10, 12, 16, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Sections */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Hero */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 60px 80px;
+    gap: 80px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.5); }
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(44px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero-name .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-desc {
+    font-size: 13px;
+    color: #9ca3af;
+    line-height: 1.9;
+    max-width: 500px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,229,255,0.3); }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* Hero right — contact card */
+  .hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .contact-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .contact-icon {
+    width: 40px; height: 40px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .contact-value {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .exp-badge {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .exp-item { text-align: center; }
+  .exp-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .exp-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+  /* Skills */
+  #skills {
+    padding: 100px 60px;
+    background: var(--surface);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .skill-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--card-glow);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .skill-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateY(-4px);
+  }
+  .skill-card:hover::after { opacity: 1; }
+
+  .skill-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .skill-category {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Experience */
+  #experience {
+    padding: 100px 60px;
+  }
+
+  .exp-timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), transparent);
+  }
+
+  .exp-entry {
+    position: relative;
+    margin-bottom: 60px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    transition: border-color 0.3s;
+  }
+
+  .exp-entry:hover { border-color: rgba(0,229,255,0.25); }
+
+  .exp-entry::before {
+    content: '';
+    position: absolute;
+    left: -47px;
+    top: 36px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 20px var(--accent);
+  }
+
+  .exp-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .exp-company {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .exp-period {
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .exp-role {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .exp-points {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .exp-points li {
+    display: flex;
+    gap: 14px;
+    font-size: 12.5px;
+    color: #9ca3af;
+    line-height: 1.8;
+  }
+
+  .exp-points li::before {
+    content: '▸';
+    color: var(--accent3);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Certificates */
+  #certs {
+    padding: 100px 60px;
+    background: var(--surface);
+  }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .cert-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: all 0.3s;
+  }
+
+  .cert-card:hover {
+    border-color: rgba(124,107,255,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(124,107,255,0.1);
+  }
+
+  .cert-badge {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, rgba(124,107,255,0.2), rgba(0,229,255,0.1));
+    border: 1px solid rgba(124,107,255,0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .cert-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* Education */
+  #education {
+    padding: 100px 60px;
+  }
+
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 40px;
+    max-width: 900px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .edu-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent3));
+  }
+
+  .edu-degree {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .edu-field {
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .edu-institution {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .edu-stat {
+    text-align: right;
+  }
+
+  .edu-cgpa {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .edu-cgpa-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Tech stack row */
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .tech-pill {
+    background: rgba(124,107,255,0.08);
+    border: 1px solid rgba(124,107,255,0.2);
+    color: #a78bfa;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-left {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .footer-right {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    #skills, #experience, #certs, #education { padding: 80px 24px; }
+    .skills-grid, .certs-grid { grid-template-columns: 1fr; }
+    footer { padding: 40px 24px; flex-direction: column; gap: 16px; text-align: center; }
+    .edu-card { grid-template-columns: 1fr; }
+    .edu-stat { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav>
+  <div class="nav-logo">AK.</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#education">Education</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1 class="hero-name">
+      Arjun<br>
+      <span class="highlight">Krishnamurthy</span>
+    </h1>
+    <p class="hero-title">Wintel & VMware Engineer</p>
+    <p class="hero-desc">
+      2+ years managing enterprise Windows Server and virtualized environments. Proven track record of 99.9% uptime, security hardening, and infrastructure reliability at scale with HCL Technologies.
+    </p>
+    <div class="hero-cta">
+      <a href="mailto:arjun.krishnamurthy@email.com" class="btn-primary">✉ Contact Me</a>
+      <a href="#experience" class="btn-outline">View Experience →</a>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-value">+91 98765 43210</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">arjun.krishnamurthy@email.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-value">Chennai, Tamil Nadu, India</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🎓</div>
+        <div>
+          <div class="contact-label">Education</div>
+          <div class="contact-value">B.E — ECE, Sathyabama University</div>
+        </div>
+      </div>
+    </div>
+    <div class="exp-badge">
+      <div class="exp-item">
+        <div class="exp-num">2+</div>
+        <div class="exp-label">Years Exp</div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-num">99.9%</div>
+        <div class="exp-label">Uptime SLA</div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-num">6+</div>
+        <div class="exp-label">Certs</div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-num">P1</div>
+        <div class="exp-label">Incident Mgmt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Core Competencies</div>
+      <h2 class="section-title">Technical Skills</h2>
+    </div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">🖥️</div>
+      <div class="skill-category">Core OS & Admin</div>
+      <div class="skill-tags">
+        <span class="tag">Windows Server 2008</span>
+        <span class="tag">2012/R2</span>
+        <span class="tag">2016</span>
+        <span class="tag">2019</span>
+        <span class="tag">2022</span>
+        <span class="tag">Wintel Admin</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">☁️</div>
+      <div class="skill-category">Virtualization</div>
+      <div class="skill-tags">
+        <span class="tag">VMware ESXi</span>
+        <span class="tag">Virtual Machines</span>
+        <span class="tag">Hyper-V</span>
+        <span class="tag">SAN/NAS</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-category">High Availability</div>
+      <div class="skill-tags">
+        <span class="tag">Windows Failover Clustering</span>
+        <span class="tag">Cluster Management</span>
+        <span class="tag">99.9% Uptime</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔧</div>
+      <div class="skill-category">Management Tools</div>
+      <div class="skill-tags">
+        <span class="tag">SCCM</span>
+        <span class="tag">Active Directory</span>
+        <span class="tag">DNS/DHCP</span>
+        <span class="tag">GPO</span>
+        <span class="tag">File Server</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📊</div>
+      <div class="skill-category">Monitoring & ITSM</div>
+      <div class="skill-tags">
+        <span class="tag">SolarWinds</span>
+        <span class="tag">ServiceNow</span>
+        <span class="tag">Cisco UCS Console</span>
+        <span class="tag">ITIL 4</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔒</div>
+      <div class="skill-category">Security & Backup</div>
+      <div class="skill-tags">
+        <span class="tag">System Hardening</span>
+        <span class="tag">Patch Management</span>
+        <span class="tag">Access Control</span>
+        <span class="tag">Backup/Recovery</span>
+        <span class="tag">Compliance</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 40px;">
+    <div class="section-label" style="margin-bottom: 16px;">Additional Technologies</div>
+    <div class="tech-stack">
+      <span class="tech-pill">AWS</span>
+      <span class="tech-pill">Azure (AZ-900)</span>
+      <span class="tech-pill">Python</span>
+      <span class="tech-pill">SQL</span>
+      <span class="tech-pill">GIT</span>
+      <span class="tech-pill">Linux Server</span>
+      <span class="tech-pill">Data Analytics</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Career</div>
+      <h2 class="section-title">Work Experience</h2>
+    </div>
+  </div>
+
+  <div class="exp-timeline">
+    <div class="exp-entry">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-company">HCL Technologies</div>
+          <div class="exp-role">Wintel / VMware Engineer</div>
+        </div>
+        <div class="exp-period">March 2024 — Present</div>
+      </div>
+      <ul class="exp-points">
+        <li>Set up, configured, and managed Windows Server and VMware/Hyper-V virtualization environments ensuring high performance, maximum uptime, and strong security posture.</li>
+        <li>Performed regular health checks, patch management, OS updates, and security hardening in line with IT policies and audit compliance requirements.</li>
+        <li>Monitored server performance, drove optimization efforts, and handled LUN expansions and data migration to support business continuity and growth.</li>
+        <li>Resolved critical Priority 1 (P1) incidents by quickly diagnosing and fixing domain, access, and infrastructure issues to reduce downtime and business impact.</li>
+        <li>Managed data backup processes and ensured compliance with data protection and retention policies to secure organizational data.</li>
+        <li>Followed ITIL best practices for incident, problem, and change management using ServiceNow, SCCM, and Cisco UCS Console to meet SLA targets.</li>
+        <li>Led server decommissioning activities, license reclamation, and hardware retirement in compliance with audit and organizational standards.</li>
+        <li>Managed key infrastructure services including Active Directory, DNS, DHCP, File Server, and Group Policy (GPOs) for user access control and network efficiency.</li>
+        <li>Administered VMware ESXi hosts, virtual machines, and SAN/NAS storage systems to maintain high availability, scalability, and stable operations.</li>
+        <li>Maintained clear documentation of system configurations, storage architecture, and operating procedures for consistency and reference.</li>
+        <li>Worked closely with cross-functional teams to deliver technical support, execute infrastructure upgrades, and improve overall system reliability.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certs">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Achievements</div>
+      <h2 class="section-title">Certifications</h2>
+    </div>
+  </div>
+
+  <div class="certs-grid">
+    <div class="cert-card">
+      <div class="cert-badge">☁️</div>
+      <div>
+        <div class="cert-name">Microsoft Certified: Azure Fundamentals AZ-900</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-badge">🐍</div>
+      <div>
+        <div class="cert-name">Basic to Advanced Python Programming</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-badge">📊</div>
+      <div>
+        <div class="cert-name">Data Analytics & Python — CISCO Certified</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-badge">🖥️</div>
+      <div>
+        <div class="cert-name">Windows System Administration — Percipio HCL</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-badge">⚙️</div>
+      <div>
+        <div class="cert-name">ITIL 4 Foundation — PeopleCert</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-badge">🗄️</div>
+      <div>
+        <div class="cert-name">Oracle SQL — Percipio HCL</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Academic Background</div>
+      <h2 class="section-title">Education</h2>
+    </div>
+  </div>
+
+  <div class="edu-card">
+    <div>
+      <div class="section-label" style="margin-bottom: 8px;">2019 — 2023</div>
+      <div class="edu-degree">Bachelor of Engineering</div>
+      <div class="edu-field">Electronics & Communication Engineering (ECE)</div>
+      <div class="edu-institution">
+        Sathyabama Institute of Science and Technology<br>
+        Chennai, Tamil Nadu, India
+      </div>
+    </div>
+    <div class="edu-stat">
+      <div class="edu-cgpa">8.57</div>
+      <div class="edu-cgpa-label">CGPA / 10</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">AK.</div>
+  <div class="footer-right">
+    Arjun Krishnamurthy · Chennai, India · arjun.krishnamurthy@email.com
+  </div>
+</footer>
+
+</body>
+</html>
